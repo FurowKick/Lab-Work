@@ -4,6 +4,7 @@ using MoneyTransfer.Forms;
 
 namespace MoneyTransfer
 {
+
     internal static class Program
     {
         [STAThread]
