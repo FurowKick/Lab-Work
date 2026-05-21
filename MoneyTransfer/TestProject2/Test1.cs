@@ -50,7 +50,7 @@ namespace MoneyTransfer.Tests
         }
 
         // Тестирует: Выбрасывание NotSupportedException для неподдерживаемых пар валют
-        // Тип: Негативный тест (включая одинаковые валюты и неверный регистр)
+        // Тип: Негативный тест
         [DataTestMethod]
         [DataRow(100.0, "USD", "GBP")]
         [DataRow(100.0, "EUR", "GBP")]
