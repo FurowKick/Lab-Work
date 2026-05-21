@@ -8,7 +8,8 @@ namespace MoneyTransfer.Models
 {
     public class CurrencyConverter
     {
-        private decimal usdToEur = 0.88m; // Примерный курс валют 
+        // Примерные курс валют 
+        private decimal usdToEur = 0.88m; 
         private decimal eurToUsd = 1.12m;
 
         public decimal Convert(decimal amount, string fromCurrency, string toCurrency)
