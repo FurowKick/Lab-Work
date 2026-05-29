@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 using MoneyTransfer.Models;
 
@@ -61,7 +62,6 @@ namespace MoneyTransfer.Forms
             this.Controls.Add(convertButton);
             this.Controls.Add(resultLabel);
 
-            // Инициализация конвертера
             converter = new CurrencyConverter();
         }
 
@@ -72,8 +72,8 @@ namespace MoneyTransfer.Forms
                 MessageBox.Show("Введите сумму для конвертации!");
                 return;
             }
-            decimal amount;
-            if (!decimal.TryParse(amountTextBox.Text, out amount))
+
+            if (!decimal.TryParse(amountTextBox.Text, out decimal amount))
             {
                 MessageBox.Show("Неверный формат суммы!");
                 return;
@@ -90,12 +90,31 @@ namespace MoneyTransfer.Forms
 
             try
             {
+                var stopwatch = Stopwatch.StartNew();
                 decimal result = converter.Convert(amount, fromCurrency, toCurrency);
+                stopwatch.Stop();
+
+                Debug.WriteLine($"[PERF] {amount} {fromCurrency} → {result} {toCurrency} | {stopwatch.Elapsed.TotalMilliseconds:F2} мс");
+
                 resultLabel.Text = $"Результат: {amount} {fromCurrency} = {result} {toCurrency}";
+
+                if (amount <= 1_000_000m && stopwatch.Elapsed.TotalMilliseconds > 100)
+                {
+                    Debug.WriteLine($"[WARN] Превышено время: {stopwatch.Elapsed.TotalMilliseconds:F2} мс");
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка ввода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (NotSupportedException ex)
+            {
+                MessageBox.Show(ex.Message, "Не поддерживается", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"Непредвиденная ошибка: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
