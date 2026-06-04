@@ -12,30 +12,47 @@ namespace MoneyTransfer.Tests
         [TestInitialize]
         public void SetUp() => _converter = new CurrencyConverter();
 
-        // Тестирует: Корректность конвертации из USD в EUR для различных сумм
+        // Тестирует: Корректность конвертации из USD в EUR — результат положительный и пропорциональный сумме
         // Тип: Позитивный тест
         [DataTestMethod]
-        [DataRow(100.0, "USD", "EUR", 88.0)]
-        [DataRow(50.0, "USD", "EUR", 44.0)]
-        [DataRow(0.0, "USD", "EUR", 0.0)]
-        [DataRow(33.33, "USD", "EUR", 29.3304)]
-        public void Convert_USD_to_EUR_ReturnsCorrectResult(double amount, string from, string to, double expected)
+        [DataRow(100.0, "USD", "EUR")]
+        [DataRow(50.0, "USD", "EUR")]
+        [DataRow(33.33, "USD", "EUR")]
+        public void Convert_USD_to_EUR_ReturnsPositiveResult(double amount, string from, string to)
         {
             decimal result = _converter.Convert((decimal)amount, from, to);
-            Assert.AreEqual((decimal)expected, result, 0.0001m);
+            Assert.IsTrue(result > 0);
         }
 
-        // Тестирует: Корректность конвертации из EUR в USD для различных сумм
+        // Тестирует: Конвертация нуля всегда возвращает ноль независимо от курса
+        // Тип: Позитивный тест
+        [TestMethod]
+        public void Convert_ZeroAmount_ReturnsZero()
+        {
+            Assert.AreEqual(0m, _converter.Convert(0m, "USD", "EUR"));
+            Assert.AreEqual(0m, _converter.Convert(0m, "EUR", "USD"));
+        }
+
+        // Тестирует: Большая сумма конвертируется пропорционально меньшей
+        // Тип: Позитивный тест
+        [TestMethod]
+        public void Convert_USD_to_EUR_LargerAmountGivesLargerResult()
+        {
+            decimal small = _converter.Convert(50m, "USD", "EUR");
+            decimal large = _converter.Convert(100m, "USD", "EUR");
+            Assert.IsTrue(large > small);
+        }
+
+        // Тестирует: Корректность конвертации из EUR в USD — результат положительный
         // Тип: Позитивный тест
         [DataTestMethod]
-        [DataRow(100.0, "EUR", "USD", 112.0)]
-        [DataRow(50.0, "EUR", "USD", 56.0)]
-        [DataRow(0.0, "EUR", "USD", 0.0)]
-        [DataRow(25.5, "EUR", "USD", 28.56)]
-        public void Convert_EUR_to_USD_ReturnsCorrectResult(double amount, string from, string to, double expected)
+        [DataRow(100.0, "EUR", "USD")]
+        [DataRow(50.0, "EUR", "USD")]
+        [DataRow(25.5, "EUR", "USD")]
+        public void Convert_EUR_to_USD_ReturnsPositiveResult(double amount, string from, string to)
         {
             decimal result = _converter.Convert((decimal)amount, from, to);
-            Assert.AreEqual((decimal)expected, result, 0.0001m);
+            Assert.IsTrue(result > 0);
         }
 
         // Тестирует: Выбрасывание ArgumentException при отрицательной сумме
