@@ -19,7 +19,7 @@ namespace MoneyTransfer.Forms
         private Label ratesLabel;
         private Label statusLabel;
 
-        public CurrencyConverterForm()
+        public CurrencyConverterForm() 
         {
             this.Text = "Конвертер валют";
             this.Width = 340;
