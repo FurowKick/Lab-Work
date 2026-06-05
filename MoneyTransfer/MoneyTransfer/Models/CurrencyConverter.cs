@@ -24,7 +24,7 @@ namespace MoneyTransfer.Models
             try
             {
                 // Получаем курсы относительно USD
-                string url = "https://open.er-api.com/v6/latest/USD";
+                string url = "https://api.frankfurter.app/latest?from=USD";
                 var response = await _httpClient.GetStringAsync(url);
                 using var doc = JsonDocument.Parse(response);
 
