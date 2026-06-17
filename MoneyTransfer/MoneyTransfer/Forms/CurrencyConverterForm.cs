@@ -87,6 +87,15 @@ namespace MoneyTransfer.Forms
                 Text = "Последнее обновление: —"
             };
 
+            fromCurrencyComboBox.Name = "fromCurrencyComboBox";
+            toCurrencyComboBox.Name = "toCurrencyComboBox";
+            amountTextBox.Name = "amountTextBox";
+            convertButton.Name = "convertButton";
+            refreshButton.Name = "refreshButton";
+            resultLabel.Name = "resultLabel";
+            ratesLabel.Name = "ratesLabel";
+            statusLabel.Name = "statusLabel";
+
             this.Controls.AddRange(new Control[]
             {
                 fromCurrencyComboBox, toCurrencyComboBox,
